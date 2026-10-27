@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Kalkulator Alokasi Dana</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>Kalkulator Alokasi Dana</h1>
+    <h2>By Fahri</h2>
+    <p>Masukkan jumlah uangmu:</p>
+    <input type="number" id="uang" placeholder="Contoh: 300000">
+
+    <p>Atur persentase alokasi kalian:</p>
+    <div class="baris"><span>Tabungan</span><span class="nilai"><input type="number" id="p-tabungan" value="30" min="0" max="100">%</span></div>
+    <div class="baris"><span>Dana darurat</span><span class="nilai"><input type="number" id="p-darurat" value="10" min="0" max="100">%</span></div>
+    <div class="baris"><span>Sedekah</span><span class="nilai"><input type="number" id="p-sedekah" value="10" min="0" max="100">%</span></div>
+    <div class="baris"><span>Kebutuhan</span><span class="nilai"><input type="number" id="p-kebutuhan" value="30" min="0" max="100">%</span></div>
+    <div class="baris"><span>Foya-foya</span><span class="nilai"><input type="number" id="p-lentur" value="20" min="0" max="100">%</span></div>
+
+    <p id="total"></p>
+
+    <button id="tombol" onclick="hitung()">Hitung</button>
+    <p id="hasil"></p>
+
+    <script src="script.js"></script>
+  </body>
+</html>
+
