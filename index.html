@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Kalkulator Alokasi Dana</title>
-    <link rel="stylesheet" href="style.css">
+    
   </head>
   <body>
     <h1>Kalkulator Alokasi Dana</h1>
@@ -22,7 +22,175 @@
     <button id="tombol" onclick="hitung()">Hitung</button>
     <p id="hasil"></p>
 
-    <script src="script.js"></script>
+    <style>
+      * {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f7f2;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+h1 {
+  color: #2e7d32;
+}
+
+h2 {
+  color: #2e7d32;
+  font-size: 15px
+}
+
+p {
+  font-size: 20px;
+}
+
+input {
+  font-size: 18px;
+  padding: 8px;
+  border: 2px solid #2e7d32;
+  border-radius: 8px;
+}
+
+#uang {
+  width: 260px;
+}
+
+.baris {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 260px;
+  margin: 4px 0;
+  font-size: 18px;
+}
+
+.baris input {
+  width: 80px;
+  text-align: center;
+}
+
+button {
+  width: 260px;
+  font-size: 18px;
+  padding: 10px;
+  margin-top: 12px;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+.nilai {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pas {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.salah {
+  color: #c62828;
+  font-weight: bold;
+}
+
+button:disabled {
+  background-color: #9e9e9e;
+}
+.pas {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.salah {
+  color: #c62828;
+  font-weight: bold;
+}
+
+button:disabled {
+  background-color: #9e9e9e;
+}
+    </style>
+
+    <script>
+      var pos = [
+  { nama: "Tabungan", id: "p-tabungan" },
+  { nama: "Dana darurat", id: "p-darurat" },
+  { nama: "Sedekah", id: "p-sedekah" },
+  { nama: "Kebutuhan", id: "p-kebutuhan" },
+  { nama: "Foya-foya", id: "p-lentur" }
+];
+
+function cekTotal() {
+  var total = 0;
+  var adaNegatif = false;
+
+  for (var i = 0; i < pos.length; i++) {
+    var nilai = Number(document.getElementById(pos[i].id).value);
+    if (nilai < 0) {
+      adaNegatif = true;
+    }
+    total += nilai;
+  }
+
+  total = Math.round(total * 100) / 100;
+
+  var elTotal = document.getElementById("total");
+  var tombol = document.getElementById("tombol");
+  elTotal.innerHTML = "Total: " + total + "%";
+
+  if (total === 100 && !adaNegatif) {
+    elTotal.className = "pas";
+    tombol.disabled = false;
+  } else {
+    elTotal.className = "salah";
+    tombol.disabled = true;
+    if (total > 100) {
+      elTotal.innerHTML += " (kelebihan " + (total - 100) + "%)";
+    } else if (total < 100 && !adaNegatif) {
+      elTotal.innerHTML += " (kurang " + (100 - total) + "%)";
+    }
+  }
+}
+
+for (var i = 0; i < pos.length; i++) {
+  document.getElementById(pos[i].id).addEventListener("input", cekTotal);
+}
+
+cekTotal();
+
+function hitung() {
+  var uang = Number(document.getElementById("uang").value);
+  var hasil = document.getElementById("hasil");
+
+  if (uang <= 0) {
+    hasil.innerHTML = "Isi dulu jumlah uangmu dengan angka lebih dari 0.";
+    return;
+  }
+
+  var teks = "";
+
+  for (var i = 0; i < pos.length; i++) {
+    var persen = Number(document.getElementById(pos[i].id).value);
+    var jumlah = uang * persen / 100;
+    teks += pos[i].nama + " (" + persen + "%): Rp" +
+      jumlah.toLocaleString("id-ID") + "<br>";
+  }
+
+  hasil.innerHTML = teks;
+}
+      
+    </script>
+    
   </body>
 </html>
 
