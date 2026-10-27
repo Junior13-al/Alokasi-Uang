@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alokasi Dana</title>
+<style>
+
+
+@keyframes alokasiSukses {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(93, 155, 105, 0);
+  }
+  50% {
+    transform: scale(1.025);
+    box-shadow: 0 0 18px rgba(93, 155, 105, 0.35);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(93, 155, 105, 0);
+  }
+}
+
+.alokasi-sukses {
+  animation: alokasiSukses 0.45s ease-out;
+}
+
+  
+* {
+  box-sizing: border-box;
+}
+:root {
+  --green: #55745d;
+  --green-dark: #365440;
+  --green-light: #e8f0e7;
+  --cream: #f6f7f0;
+  --text: #263b2c;
+  --muted: #819084;
+  --white: #ffffff;
+  --red: #dc6262;
+  --yellow: #e8c85a;
+}
+body {
+  margin: 0;
+  padding: 28px 16px;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background: var(--cream);
+  color: var(--text);
+}
+.app {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+header {
+  text-align: center;
+  margin-bottom: 26px;
+}
+.header-icon {
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  border-radius: 18px;
+  background: var(--green-light);
+  color: var(--green-dark);
+  font-size: 27px;
+}
+h1 {
+  margin: 0 0 8px;
+  font-size: clamp(27px, 7vw, 34px);
+  letter-spacing: -1px;
+}
+.subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.card {
+  padding: 22px;
+  margin-bottom: 16px;
+  background: var(--white);
+  border: 1px solid #e8ece4;
+  border-radius: 22px;
+  box-shadow: 0 8px 24px rgba(44, 69, 48, 0.045);
+}
+.section-title {
+  margin: 0 0 18px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.label {
+  display: block;
+  margin-bottom: 10px;
+  color: #657669;
+  font-size: 13px;
+  font-weight: 600;
+}
+.money-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border: 1px solid #dce5da;
+  border-radius: 13px;
+  background: #fbfcf9;
+}
+.money-input span {
+  color: var(--green);
+  font-weight: 700;
+}
+.money-input input {
+  width: 100%;
+  min-width: 0;
+  padding: 15px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 700;
+}
+input {
+  font: inherit;
+}
+.money-input:focus-within {
+  border-color: var(--green);
+}
+.allocation-row {
+  margin-bottom: 23px;
+}
+.row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 9px;
+}
+.category-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+.category-percent {
+  font-size: 15px;
+  font-weight: 800;
+  transition: color 0.2s;
+}
+.slider-row {
+  width: 100%;
+}
+.percent-slider {
+  --slider-color: #5d9b69;
+  --fill: 30%;
+  display: block;
+  width: 100%;
+  height: 9px;
+  margin: 10px 0 0;
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 20px;
+  outline: none;
+  cursor: pointer;
+  touch-action: pan-y;
+  background: linear-gradient(
+    to right,
+    var(--slider-color) 0%,
+    var(--slider-color) var(--fill),
+    #edf1eb var(--fill),
+    #edf1eb 100%
+  );
+}
+.percent-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: var(--slider-color);
+  border: 3px solid white;
+  box-shadow: 0 1px 5px #0002;
+}
+.percent-slider::-moz-range-thumb {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--slider-color);
+  border: 3px solid white;
+  box-shadow: 0 1px 5px #0002;
+}
+.category-icon {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  font-size: 19px;
+}
+.savings { background: #e4efe2; color: #4b7953; }
+.emergency { background: #f9ebd9; color: #a87532; }
+.charity { background: #f5e4eb; color: #a65b7c; }
+.needs { background: #e2ebf6; color: #527ca9; }
+.fun { background: #eee5f7; color: #8a68ad; }
+.total-box {
+  padding: 16px;
+  border-radius: 15px;
+  background: #f5f8f2;
+}
+.total-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.total-label {
+  color: #657669;
+  font-size: 13px;
+}
+.total-value {
+  font-size: 20px;
+  font-weight: 800;
+  transition: color 0.2s;
+}
+.total-value.invalid {
+  color: var(--red);
+}
+.total-progress {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #e2e9df;
+}
+.total-progress-fill {
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: var(--green);
+  transition: width 0.2s, background 0.2s;
+}
+.status {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.status.error {
+  color: var(--red);
+}
+button {
+  width: 100%;
+  margin-top: 18px;
+  padding: 16px;
+  border: none;
+  border-radius: 14px;
+  background: var(--green);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+button:hover {
+  background: var(--green-dark);
+}
+button:active {
+  transform: scale(0.98);
+}
+#hasil[hidden] {
+  display: none;
+}
+.result-header {
+  padding: 20px;
+  margin-bottom: 18px;
+  border-radius: 16px;
+  background: var(--green-dark);
+  color: white;
+}
+.result-header p {
+  margin: 0 0 8px;
+  color: #d6e4d7;
+  font-size: 13px;
+}
+.result-header h2 {
+  margin: 0;
+  font-size: clamp(22px, 6vw, 29px);
+  overflow-wrap: anywhere;
+}
+.result-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #edf0eb;
+}
+.result-row:last-child {
+  border-bottom: none;
+}
+.result-info {
+  flex: 1;
+  min-width: 0;
+}
+.result-name {
+  margin-bottom: 5px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.result-percent {
+  color: var(--muted);
+  font-size: 12px;
+}
+.result-amount {
+  text-align: right;
+  font-size: 13px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.footer {
+  padding: 10px 0;
+  color: #89958a;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.6;
+}
+@media (max-width: 360px) {
+  .card {
+    padding: 17px;
+  }
+  .result-row {
+    gap: 8px;
+  }
+  .category-icon {
+    width: 32px;
+    height: 32px;
+  }
+  .result-amount {
+    font-size: 12px;
+  }
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <header>
+    <div class="header-icon">↗</div>
+    <h1>Alokasi Dana</h1>
+    <h2>By Fahri</h2>
+    <p class="subtitle">
+      Atur uangmu dengan lebih bijak.<br>
+      Rencanakan hari ini, siapkan masa depan.
+    </p>
+  </header>
+  <section class="card">
+    <h2 class="section-title">01. Dana yang Kamu Punya</h2>
+    <label class="label" for="uang">
+      Masukkan jumlah uang (Rupiah)
+    </label>
+    <div class="money-input">
+      <span>Rp</span>
+      <input
+        type="number"
+        id="uang"
+        min="1"
+        step="any"
+        placeholder="Contoh: 500000"
+        inputmode="decimal"
+      >
+    </div>
+  </section>
+  <section class="card">
+    <h2 class="section-title">02. Atur Persentase</h2>
+    <div class="allocation-row" data-name="Tabungan">
+      <div class="row-top">
+        <span class="category-name">Tabungan</span>
+        <span class="category-percent">30%</span>
+      </div>
+      <div class="slider-row">
+        <input class="percent-slider persen" type="range"
+          min="0" max="100" step="1" value="30"
+          aria-label="Persentase Tabungan">
+      </div>
+    </div>
+    <div class="allocation-row" data-name="Dana Darurat">
+      <div class="row-top">
+        <span class="category-name">Dana Darurat</span>
+        <span class="category-percent">10%</span>
+      </div>
+      <div class="slider-row">
+        <input class="percent-slider persen" type="range"
+          min="0" max="100" step="1" value="10"
+          aria-label="Persentase Dana Darurat">
+      </div>
+    </div>
+    <div class="allocation-row" data-name="Sedekah">
+      <div class="row-top">
+        <span class="category-name">Sedekah</span>
+        <span class="category-percent">10%</span>
+      </div>
+      <div class="slider-row">
+        <input class="percent-slider persen" type="range"
+          min="0" max="100" step="1" value="10"
+          aria-label="Persentase Sedekah">
+      </div>
+    </div>
+    <div class="allocation-row" data-name="Kebutuhan">
+      <div class="row-top">
+        <span class="category-name">Kebutuhan</span>
+        <span class="category-percent">30%</span>
+      </div>
+      <div class="slider-row">
+        <input class="percent-slider persen" type="range"
+          min="0" max="100" step="1" value="30"
+          aria-label="Persentase Kebutuhan">
+      </div>
+    </div>
+    <div class="allocation-row" data-name="Foya-foya">
+      <div class="row-top">
+        <span class="category-name">Foya-foya</span>
+        <span class="category-percent">20%</span>
+      </div>
+      <div class="slider-row">
+        <input class="percent-slider persen" type="range"
+          min="0" max="100" step="1" value="20"
+          aria-label="Persentase Foya-foya">
+      </div>
+    </div>
+    <div class="total-box">
+      <div class="total-top">
+        <span class="total-label">Total alokasi</span>
+        <span class="total-value" id="totalPersen">100%</span>
+      </div>
+      <div class="total-progress">
+        <div class="total-progress-fill" id="totalProgress"></div>
+      </div>
+      <p class="status" id="statusPersen">
+        Persentase sudah sesuai.
+      </p>
+    </div>
+    <p class="status error" id="pesan" role="alert"></p>
+    <button type="button" id="btnHitung">
+      Hitung Alokasi Dana ↗
+    </button>
+  </section>
+  <section class="card" id="hasil" hidden>
+    <h2 class="section-title">03. Hasil Alokasi</h2>
+    <div class="result-header">
+      <p>Total dana yang dialokasikan</p>
+      <h2 id="totalRupiah">Rp0</h2>
+    </div>
+    <div id="daftarHasil"></div>
+  </section>
+  <footer class="footer">
+    Kelola uangmu hari ini untuk masa depan yang lebih baik.
+  </footer>
+</main>
+<script>
+const uangInput = document.getElementById("uang");
+const persenInputs = [...document.querySelectorAll(".persen")];
+const rows = [...document.querySelectorAll(".allocation-row")];
+const totalPersen = document.getElementById("totalPersen");
+const totalProgress = document.getElementById("totalProgress");
+const statusPersen = document.getElementById("statusPersen");
+const pesan = document.getElementById("pesan");
+const btnHitung = document.getElementById("btnHitung");
+const hasil = document.getElementById("hasil");
+const totalRupiah = document.getElementById("totalRupiah");
+const daftarHasil = document.getElementById("daftarHasil");
+const icons = ["savings", "emergency", "charity", "needs", "fun"];
+const symbols = ["↗", "✚", "♡", "⌂", "✳"];
+const rupiah = angka =>
+  new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 2
+  }).format(angka);
+function bacaPersentase() {
+  return persenInputs.map(input => Number(input.value));
+}
+function warnaPersen(angka) {
+  if (angka < 30) return "#e8c85a";
+  if (angka <= 60) return "#5d9b69";
+  return "#dc6262";
+}
+function perbaruiTampilan() {
+  const nilai = bacaPersentase();
+  const total = nilai.reduce((sum, angka) => sum + angka, 0);
+  totalPersen.textContent = `${total}%`;
+  totalPersen.classList.toggle("invalid", total !== 100);
+  totalProgress.style.width = `${Math.min(total, 100)}%`;
+  totalProgress.style.background =
+    total > 100 ? "#dc6262" :
+    total < 100 ? "#e8c85a" : "#5d9b69";
+  statusPersen.classList.toggle("error", total !== 100);
+  if (total > 100) {
+    statusPersen.textContent =
+      `Kelebihan ${total - 100}%. Kurangi alokasi.`;
+  } else if (total < 100) {
+    statusPersen.textContent =
+      `Masih tersisa ${100 - total}%.`;
+  } else {
+    statusPersen.textContent = "Persentase sudah sesuai.";
+  }
+}
+function perbaruiProgress() {
+  rows.forEach((row, index) => {
+    const input = persenInputs[index];
+    const angka = Number(input.value);
+    const warna = warnaPersen(angka);
+    input.style.setProperty("--fill", `${angka}%`);
+    input.style.setProperty("--slider-color", warna);
+    const label = row.querySelector(".category-percent");
+    label.textContent = `${angka}%`;
+    label.style.color = warna;
+  });
+  perbaruiTampilan();
+}
+function hitungAlokasi() {
+  const nilai = bacaPersentase();
+  const total = nilai.reduce((sum, angka) => sum + angka, 0);
+  const uang = Number(uangInput.value);
+  pesan.textContent = "";
+  if (
+    uangInput.value.trim() === "" ||
+    !Number.isFinite(uang) ||
+    uang <= 0
+  ) {
+    pesan.textContent =
+      "Masukkan jumlah uang yang lebih besar dari nol.";
+    uangInput.focus();
+    return;
+  }
+  if (Math.abs(total - 100) > 0.000001) {
+    pesan.textContent =
+      `Total persentase harus tepat 100%. Saat ini ${total}%.`;
+    return;
+  }
+  const alokasi = rows.map((row, index) => ({
+    nama: row.dataset.name,
+    persen: nilai[index],
+    nominal: uang * nilai[index] / 100,
+    ikon: symbols[index],
+    kelas: icons[index]
+  }));
+  totalRupiah.textContent = rupiah(uang);
+  daftarHasil.innerHTML = alokasi.map(item => `
+    <div class="result-row">
+      <div class="category-icon ${item.kelas}">${item.ikon}</div>
+      <div class="result-info">
+        <div class="result-name">${item.nama}</div>
+        <div class="result-percent">${item.persen}% dari total dana</div>
+      </div>
+      <div class="result-amount">${rupiah(item.nominal)}</div>
+    </div>
+  `).join("");
+  hasil.hidden = false;
+  hasil.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+persenInputs.forEach(input => {
+  input.addEventListener("input", () => {
+    perbaruiProgress();
+    pesan.textContent = "";
+    hasil.hidden = true;
+  });
+});
+uangInput.addEventListener("input", () => {
+  pesan.textContent = "";
+  hasil.hidden = true;
+});
+btnHitung.addEventListener("click", hitungAlokasi);
+perbaruiProgress();
+
+
+const semuaSlider = [...document.querySelectorAll(".percent-slider")];
+
+semuaSlider.forEach((slider) => {
+  slider.addEventListener("input", function () {
+    const totalSlider = semuaSlider.reduce(
+      (total, item) => total + Number(item.value),
+      0
+    );
+
+    // Jika total lebih dari 100%, batasi slider yang sedang digeser
+    if (totalSlider > 100) {
+      const totalLain = semuaSlider.reduce(
+        (total, item) =>
+          total + (item === slider ? 0 : Number(item.value)),
+        0
+      );
+
+      slider.value = Math.max(0, 100 - totalLain);
+    }
+  }, true);
+});
+
+  
+semuaSlider.forEach((slider) => {
+  let nilaiSebelumnya = slider.value;
+
+  slider.addEventListener("input", function () {
+    if (slider.value !== nilaiSebelumnya) {
+      nilaiSebelumnya = slider.value;
+
+      // Getaran ringan jika browser mendukungnya
+      if ("vibrate" in navigator) {
+        navigator.vibrate(10);
+      }
+    }
+  });
+});
+
+  
+</script>
+
+
+
+
+</body>
+</html>
