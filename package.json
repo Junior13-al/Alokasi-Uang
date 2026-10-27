@@ -1,0 +1,29 @@
+{
+  "name": "repo",
+  "version": "1.0.0",
+  "description": "Ini adalah website simpel berbasis codepen",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://x-access-token:ghs_13473_eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRobmQiLCJjdHgiOiI3RkJnN2V4eVA2MFZNQThBZWVvR2dTRk1rdnlBekNOZ2VrM0VIYWhOUnJEYWVmY0JhbmxHNW1WZGxRIiwiZXhwIjoxNzkzMTI1Nzc3LCJpYXQiOjE3OTMxMjIxNzcsImlzcyI6ImdpdGh1YiIsImp0aSI6IjA5OGE2MTY2LWY0MTYtNGUwYi04N2I0LTYyZjUxZGJmNzg3MiIsInZlciI6M30.94PYBFP0E-JOvje-iJu9xXRrpZc-ZfsCmuWrdMZ96E_F452nDXuzEV3B7dO_01rm9WP_D5YH--1HebVd8nKnTQ@github.com/Junior13-al/Alokasi-Uang.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Junior13-al/Alokasi-Uang/issues"
+  },
+  "homepage": "https://github.com/Junior13-al/Alokasi-Uang#readme",
+  "dependencies": {
+    "@netlify/database": "^2.0.1",
+    "@netlify/functions": "^6.0.3",
+    "drizzle-orm": "^1.0.0-beta.22"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^1.0.0-beta.22"
+  }
+}

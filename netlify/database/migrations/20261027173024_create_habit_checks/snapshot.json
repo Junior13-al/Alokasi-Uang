@@ -1,0 +1,81 @@
+{
+  "version": "8",
+  "dialect": "postgres",
+  "id": "cb090dcb-08ea-4c9d-9f0b-b55cfbd11ae2",
+  "prevIds": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "ddl": [
+    {
+      "isRlsEnabled": false,
+      "name": "habit_checks",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "device_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "habit_checks"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "habit",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "habit_checks"
+    },
+    {
+      "type": "date",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "day",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "habit_checks"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "habit_checks"
+    },
+    {
+      "columns": [
+        "device_id",
+        "habit",
+        "day"
+      ],
+      "nameExplicit": false,
+      "name": "habit_checks_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "habit_checks"
+    }
+  ],
+  "renames": []
+}
