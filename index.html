@@ -1,278 +1,539 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Kalkulator Alokasi Dana</title>
-    
-  </head>
-  <body>
-    <h1>Kalkulator Alokasi Dana</h1>
-    <h2>By Fahri</h2>
-    <p>Masukkan jumlah uangmu:</p>
-    <input type="number" id="uang" placeholder="Contoh: 300000">
-
-    <p>Atur persentase alokasi kalian:</p>
-    <div class="baris"><span>Tabungan</span><span class="nilai"><input type="number" id="p-tabungan" value="30" min="0" max="100">%</span></div>
-    <div class="baris"><span>Dana darurat</span><span class="nilai"><input type="number" id="p-darurat" value="10" min="0" max="100">%</span></div>
-    <div class="baris"><span>Sedekah</span><span class="nilai"><input type="number" id="p-sedekah" value="10" min="0" max="100">%</span></div>
-    <div class="baris"><span>Kebutuhan</span><span class="nilai"><input type="number" id="p-kebutuhan" value="30" min="0" max="100">%</span></div>
-    <div class="baris"><span>Foya-foya</span><span class="nilai"><input type="number" id="p-lentur" value="20" min="0" max="100">%</span></div>
-
-    <p id="total"></p>
-
-    <button id="tombol" onclick="hitung()">Hitung</button>
-    <p id="hasil"></p>
-
-    <style>
-
-
-
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alokasi Dana</title>
+<style>
 * {
   box-sizing: border-box;
 }
-
-html {
-  width: 100%;
-  min-height: 100%;
+:root {
+  --green: #55745d;
+  --green-dark: #365440;
+  --green-light: #e8f0e7;
+  --cream: #f6f7f0;
+  --text: #263b2c;
+  --muted: #819084;
+  --white: #ffffff;
+  --red: #c65353;
 }
-
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f2f7f2;
-  color: #111;
   margin: 0;
+  padding: 28px 16px;
   min-height: 100vh;
-  min-height: 100dvh;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-
-  text-align: center;
-  padding: 30px 20px 36px;
+  font-family: Arial, sans-serif;
+  background: var(--cream);
+  color: var(--text);
 }
-
-h1 {
-  color: #2e7d32;
-  font-size: clamp(27px, 6vw, 34px);
-  line-height: 1.3;
-  margin: 0 0 16px;
-}
-
-h2 {
-  color: #2e7d32;
-  font-size: 16px;
-  margin: 0 0 26px;
-}
-
-p {
-  font-size: 19px;
-  line-height: 1.5;
-  margin: 16px 0;
-}
-
-input {
-  box-sizing: border-box;
-  font-family: inherit;
-  font-size: 18px;
-  padding: 10px 12px;
-  min-height: 46px;
-
-  border: 2px solid #2e7d32;
-  border-radius: 8px;
-  background-color: #fff;
-  color: #111;
-}
-
-#uang {
+.app {
   width: 100%;
-  max-width: 360px;
-  margin: 0 auto 8px;
+  max-width: 520px;
+  margin: 0 auto;
 }
-
-.baris {
+header {
+  text-align: center;
+  margin-bottom: 26px;
+}
+.header-icon {
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  border-radius: 18px;
+  background: var(--green-light);
+  color: var(--green-dark);
+  font-size: 27px;
+}
+h1 {
+  margin: 0 0 8px;
+  font-size: clamp(27px, 7vw, 34px);
+  letter-spacing: -1px;
+}
+.subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.card {
+  padding: 22px;
+  margin-bottom: 16px;
+  background: var(--white);
+  border: 1px solid #e8ece4;
+  border-radius: 22px;
+  box-shadow: 0 8px 24px rgba(44, 69, 48, 0.045);
+}
+.section-title {
+  margin: 0 0 18px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.label {
+  display: block;
+  margin-bottom: 10px;
+  color: #657669;
+  font-size: 13px;
+  font-weight: 600;
+}
+.money-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border: 1px solid #dce5da;
+  border-radius: 13px;
+  background: #fbfcf9;
+}
+.money-input span {
+  color: var(--green);
+  font-weight: 700;
+}
+input {
+  min-width: 0;
+  font: inherit;
+}
+.money-input input {
+  width: 100%;
+  padding: 15px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 700;
+}
+.allocation-row {
+  margin-bottom: 21px;
+}
+.allocation-row:last-of-type {
+  margin-bottom: 18px;
+}
+.row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.category-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+.percent-input {
+  width: 76px;
+  padding: 9px 8px;
+  border: 1px solid #dce5da;
+  border-radius: 10px;
+  background: #fbfcf9;
+  color: var(--green-dark);
+  text-align: center;
+  font-weight: 700;
+  outline: none;
+}
+.percent-input:focus,
+.money-input:focus-within {
+  border-color: var(--green);
+}
+.percent-input.invalid {
+  border-color: var(--red);
+  color: var(--red);
+}
+.progress-track {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #edf1eb;
+}
+.progress-fill {
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: var(--green);
+  transition: width 0.25s ease;
+}
+.category-icon {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  font-size: 19px;
+}
+.savings { background: #e4efe2; color: #4b7953; }
+.emergency { background: #f9ebd9; color: #a87532; }
+.charity { background: #f5e4eb; color: #a65b7c; }
+.needs { background: #e2ebf6; color: #527ca9; }
+.fun { background: #eee5f7; color: #8a68ad; }
+.total-box {
+  padding: 16px;
+  border-radius: 15px;
+  background: #f5f8f2;
+}
+.total-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
-
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.total-label {
+  color: #657669;
+  font-size: 13px;
+}
+.total-value {
+  font-size: 20px;
+  font-weight: 800;
+}
+.total-value.invalid {
+  color: var(--red);
+}
+.total-progress {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #e2e9df;
+}
+.total-progress-fill {
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: var(--green);
+  transition: width 0.25s ease;
+}
+.total-progress-fill.invalid {
+  background: var(--red);
+}
+.status {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.status.error {
+  color: var(--red);
+}
+button {
   width: 100%;
-  max-width: 360px;
-  margin: 8px auto;
-  font-size: 17px;
-  text-align: left;
+  margin-top: 18px;
+  padding: 16px;
+  border: none;
+  border-radius: 14px;
+  background: var(--green);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
 }
-
-.baris input {
-  width: 78px;
-  min-height: 48px;
-  flex-shrink: 0;
-  text-align: center;
-  padding: 8px;
-  font-size: 18px;
+button:hover {
+  background: var(--green-dark);
 }
-
-.nilai {
+button:active {
+  transform: scale(0.98);
+}
+#hasil[hidden] {
+  display: none;
+}
+.result-header {
+  padding: 20px;
+  margin-bottom: 18px;
+  border-radius: 16px;
+  background: var(--green-dark);
+  color: white;
+}
+.result-header p {
+  margin: 0 0 8px;
+  color: #d6e4d7;
+  font-size: 13px;
+}
+.result-header h2 {
+  margin: 0;
+  font-size: clamp(22px, 6vw, 29px);
+  overflow-wrap: anywhere;
+}
+.result-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #edf0eb;
 }
-
-.pas {
-  color: #2e7d32;
-  font-weight: bold;
+.result-row:last-child {
+  border-bottom: none;
 }
-
-.salah {
-  color: #c62828;
-  font-weight: bold;
+.result-info {
+  flex: 1;
+  min-width: 0;
 }
-
-button {
-  display: block;
-  width: 100%;
-  max-width: 360px;
-  min-height: 50px;
-
-  font-family: inherit;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 12px;
-
-  margin: 20px auto 0;
-  background-color: #2e7d32;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+.result-name {
+  margin-bottom: 5px;
+  font-size: 13px;
+  font-weight: 700;
 }
-
-button:disabled {
-  background-color: #9e9e9e;
-  cursor: not-allowed;
+.result-percent {
+  color: var(--muted);
+  font-size: 12px;
 }
-
-/* Penyesuaian layar HP */
-@media (max-width: 600px) {
-  body {
-    padding: 28px 20px 32px;
+.result-amount {
+  text-align: right;
+  font-size: 13px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.footer {
+  padding: 10px 0;
+  color: #89958a;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.6;
+}
+@media (max-width: 360px) {
+  .card {
+    padding: 17px;
   }
-
-  h1 {
-    font-size: 28px;
+  .result-row {
+    gap: 8px;
   }
-
-  h2 {
-    font-size: 16px;
-    margin-bottom: 26px;
+  .category-icon {
+    width: 32px;
+    height: 32px;
   }
-
-  p {
-    font-size: 19px;
-  }
-
-  #uang,
-  .baris,
-  button {
-    max-width: 360px;
-  }
-
-  .baris {
-    font-size: 17px;
-    margin: 8px auto;
-  }
-
-  .baris input {
-    width: 78px;
-    min-height: 48px;
-  }
-
-  button {
-    margin-top: 20px;
+  .result-amount {
+    font-size: 12px;
   }
 }
-
-/* Penyesuaian laptop */
-@media (min-width: 601px) {
-  body {
-    padding-top: 44px;
-  }
+</style>
+</head>
+<body>
+<main class="app">
+  <header>
+    <div class="header-icon">↗</div>
+    <h1>Alokasi Dana.</h1>
+    <p class="subtitle">
+      Atur uangmu dengan lebih bijak.<br>
+      Rencanakan hari ini, siapkan masa depan.
+    </p>
+  </header>
+  <section class="card">
+    <h2 class="section-title">01. Dana yang Kamu Punya</h2>
+    <label class="label" for="uang">Masukkan jumlah uang (Rupiah)</label>
+    <div class="money-input">
+      <span>Rp</span>
+      <input
+        type="number"
+        id="uang"
+        min="1"
+        step="any"
+        placeholder="Contoh: 500000"
+        inputmode="decimal"
+      >
+    </div>
+  </section>
+  <section class="card">
+    <h2 class="section-title">02. Atur Persentase</h2>
+    <div class="allocation-row" data-name="Tabungan">
+      <div class="row-top">
+        <span class="category-name">Tabungan</span>
+        <input class="percent-input persen" type="number" min="0" max="100" step="any" value="30" aria-label="Persentase Tabungan">
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </div>
+    <div class="allocation-row" data-name="Dana Darurat">
+      <div class="row-top">
+        <span class="category-name">Dana Darurat</span>
+        <input class="percent-input persen" type="number" min="0" max="100" step="any" value="10" aria-label="Persentase Dana Darurat">
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </div>
+    <div class="allocation-row" data-name="Sedekah">
+      <div class="row-top">
+        <span class="category-name">Sedekah</span>
+        <input class="percent-input persen" type="number" min="0" max="100" step="any" value="10" aria-label="Persentase Sedekah">
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </div>
+    <div class="allocation-row" data-name="Kebutuhan">
+      <div class="row-top">
+        <span class="category-name">Kebutuhan</span>
+        <input class="percent-input persen" type="number" min="0" max="100" step="any" value="30" aria-label="Persentase Kebutuhan">
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </div>
+    <div class="allocation-row" data-name="Foya-foya">
+      <div class="row-top">
+        <span class="category-name">Foya-foya</span>
+        <input class="percent-input persen" type="number" min="0" max="100" step="any" value="20" aria-label="Persentase Foya-foya">
+      </div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </div>
+    <div class="total-box">
+      <div class="total-top">
+        <span class="total-label">Total alokasi</span>
+        <span class="total-value" id="totalPersen">100%</span>
+      </div>
+      <div class="total-progress">
+        <div class="total-progress-fill" id="totalProgress"></div>
+      </div>
+      <p class="status" id="statusPersen">Persentase sudah sesuai.</p>
+    </div>
+    <p class="status error" id="pesan" role="alert"></p>
+    <button type="button" id="btnHitung">Hitung Alokasi Dana ↗</button>
+  </section>
+  <section class="card" id="hasil" hidden>
+    <h2 class="section-title">03. Hasil Alokasi</h2>
+    <div class="result-header">
+      <p>Total dana yang dialokasikan</p>
+      <h2 id="totalRupiah">Rp0</h2>
+    </div>
+    <div id="daftarHasil"></div>
+  </section>
+  <footer class="footer">
+    Kelola uangmu hari ini untuk masa depan yang lebih baik.
+  </footer>
+</main>
+<script>
+const uangInput = document.getElementById("uang");
+const persenInputs = [...document.querySelectorAll(".persen")];
+const rows = [...document.querySelectorAll(".allocation-row")];
+const totalPersen = document.getElementById("totalPersen");
+const totalProgress = document.getElementById("totalProgress");
+const statusPersen = document.getElementById("statusPersen");
+const pesan = document.getElementById("pesan");
+const btnHitung = document.getElementById("btnHitung");
+const hasil = document.getElementById("hasil");
+const totalRupiah = document.getElementById("totalRupiah");
+const daftarHasil = document.getElementById("daftarHasil");
+const icons = ["savings", "emergency", "charity", "needs", "fun"];
+const symbols = ["↗", "✚", "♡", "⌂", "✳"];
+const rupiah = (angka) =>
+  new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 2
+  }).format(angka);
+function bacaPersentase() {
+  return persenInputs.map(input => {
+    if (input.value.trim() === "") return NaN;
+    return Number(input.value);
+  });
 }
-
-
-    </style>
-
-    <script>
-      var pos = [
-  { nama: "Tabungan", id: "p-tabungan" },
-  { nama: "Dana darurat", id: "p-darurat" },
-  { nama: "Sedekah", id: "p-sedekah" },
-  { nama: "Kebutuhan", id: "p-kebutuhan" },
-  { nama: "Foya-foya", id: "p-lentur" }
-];
-
-function cekTotal() {
-  var total = 0;
-  var adaNegatif = false;
-
-  for (var i = 0; i < pos.length; i++) {
-    var nilai = Number(document.getElementById(pos[i].id).value);
-    if (nilai < 0) {
-      adaNegatif = true;
-    }
-    total += nilai;
-  }
-
-  total = Math.round(total * 100) / 100;
-
-  var elTotal = document.getElementById("total");
-  var tombol = document.getElementById("tombol");
-  elTotal.innerHTML = "Total: " + total + "%";
-
-  if (total === 100 && !adaNegatif) {
-    elTotal.className = "pas";
-    tombol.disabled = false;
-  } else {
-    elTotal.className = "salah";
-    tombol.disabled = true;
-    if (total > 100) {
-      elTotal.innerHTML += " (kelebihan " + (total - 100) + "%)";
-    } else if (total < 100 && !adaNegatif) {
-      elTotal.innerHTML += " (kurang " + (100 - total) + "%)";
-    }
-  }
+function totalValid(nilai) {
+  return nilai.every(angka =>
+    Number.isFinite(angka) && angka >= 0 && angka <= 100
+  );
 }
-
-for (var i = 0; i < pos.length; i++) {
-  document.getElementById(pos[i].id).addEventListener("input", cekTotal);
-}
-
-cekTotal();
-
-function hitung() {
-  var uang = Number(document.getElementById("uang").value);
-  var hasil = document.getElementById("hasil");
-
-  if (uang <= 0) {
-    hasil.innerHTML = "Isi dulu jumlah uangmu dengan angka lebih dari 0.";
+function perbaruiTampilan() {
+  const nilai = bacaPersentase();
+  const valid = totalValid(nilai);
+  persenInputs.forEach((input, index) => {
+    const angka = nilai[index];
+    input.classList.toggle(
+      "invalid",
+      !Number.isFinite(angka) || angka < 0 || angka > 100
+    );
+  });
+  if (!valid) {
+    totalPersen.textContent = "—";
+    totalPersen.classList.add("invalid");
+    totalProgress.style.width = "0%";
+    totalProgress.classList.add("invalid");
+    statusPersen.textContent = "Setiap persentase harus 0–100.";
+    statusPersen.classList.add("error");
     return;
   }
-
-  var teks = "";
-
-  for (var i = 0; i < pos.length; i++) {
-    var persen = Number(document.getElementById(pos[i].id).value);
-    var jumlah = uang * persen / 100;
-    teks += pos[i].nama + " (" + persen + "%): Rp" +
-      jumlah.toLocaleString("id-ID") + "<br>";
+  const total = nilai.reduce((sum, angka) => sum + angka, 0);
+  totalPersen.textContent = `${Number(total.toFixed(4))}%`;
+  totalPersen.classList.toggle("invalid", total !== 100);
+  totalProgress.style.width = `${Math.min(total, 100)}%`;
+  totalProgress.classList.toggle("invalid", total > 100);
+  statusPersen.classList.toggle("error", total !== 100);
+  if (total > 100) {
+    statusPersen.textContent =
+      `Kelebihan ${Number((total - 100).toFixed(4))}%. Kurangi alokasi.`;
+  } else if (total < 100) {
+    statusPersen.textContent =
+      `Masih tersisa ${Number((100 - total).toFixed(4))}%.`;
+  } else {
+    statusPersen.textContent = "Persentase sudah sesuai.";
   }
-
-  hasil.innerHTML = teks;
 }
-      
-    </script>
-    
-  </body>
+function perbaruiProgress() {
+  rows.forEach((row, index) => {
+    const input = persenInputs[index];
+    const fill = row.querySelector(".progress-fill");
+    const angka = Number(input.value);
+    const aman =
+      input.value.trim() !== "" &&
+      Number.isFinite(angka) &&
+      angka >= 0 &&
+      angka <= 100;
+    fill.style.width = aman ? `${angka}%` : "0%";
+  });
+  perbaruiTampilan();
+}
+function hitungAlokasi() {
+  const nilai = bacaPersentase();
+  const uang = Number(uangInput.value);
+  pesan.textContent = "";
+  if (
+    uangInput.value.trim() === "" ||
+    !Number.isFinite(uang) ||
+    uang <= 0
+  ) {
+    pesan.textContent = "Masukkan jumlah uang yang lebih besar dari nol.";
+    uangInput.focus();
+    return;
+  }
+  if (!totalValid(nilai)) {
+    pesan.textContent =
+      "Setiap persentase harus berupa angka antara 0 dan 100.";
+    return;
+  }
+  const total = nilai.reduce((sum, angka) => sum + angka, 0);
+  if (Math.abs(total - 100) > 0.000001) {
+    pesan.textContent =
+      `Total persentase harus tepat 100%. Saat ini ${Number(total.toFixed(4))}%.`;
+    return;
+  }
+  const alokasi = rows.map((row, index) => ({
+    nama: row.dataset.name,
+    persen: nilai[index],
+    nominal: uang * nilai[index] / 100,
+    ikon: symbols[index],
+    kelas: icons[index]
+  }));
+  totalRupiah.textContent = rupiah(uang);
+  daftarHasil.innerHTML = alokasi.map(item => `
+    <div class="result-row">
+      <div class="category-icon ${item.kelas}">${item.ikon}</div>
+      <div class="result-info">
+        <div class="result-name">${item.nama}</div>
+        <div class="result-percent">${item.persen}% dari total dana</div>
+      </div>
+      <div class="result-amount">${rupiah(item.nominal)}</div>
+    </div>
+  `).join("");
+  hasil.hidden = false;
+  hasil.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+persenInputs.forEach(input => {
+  input.addEventListener("input", () => {
+    perbaruiProgress();
+    pesan.textContent = "";
+    hasil.hidden = true;
+  });
+});
+uangInput.addEventListener("input", () => {
+  pesan.textContent = "";
+  hasil.hidden = true;
+});
+btnHitung.addEventListener("click", hitungAlokasi);
+perbaruiProgress();
+</script>
+</body>
 </html>
-
