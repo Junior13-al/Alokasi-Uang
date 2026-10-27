@@ -158,37 +158,42 @@ button:disabled {
 }
 
 /* Tampilan iPhone */
-@media (max-width: 600px) {
+@@media (max-width: 600px) {
   body {
-    padding: 30px 22px 36px;
+    padding: 30px 16px;
   }
 
   h1 {
-    margin-bottom: 18px;
-  }
-
-  h2 {
-    margin-bottom: 28px;
+    font-size: 30px;
   }
 
   p {
-    font-size: 19px;
+    font-size: 20px;
+  }
+
+  #uang,
+  .baris,
+  button {
+    width: 100%;
+    max-width: 500px;
   }
 
   .baris {
-    font-size: 17px;
-    gap: 10px;
-    margin: 8px 0;
+    font-size: 18px;
+    margin: 10px 0;
   }
 
   .baris input {
-    width: 88px;
-    min-height: 49px;
-    font-size: 18px;
+    width: 92px;
+    min-height: 52px;
+    font-size: 19px;
   }
 
   button {
-    margin-top: 22px;
+    min-height: 54px;
+    font-size: 19px;
+  }
+}
   }
 }
 
@@ -204,6 +209,7 @@ button:disabled {
     max-width: 460px;
   }
 }
+      
 
     </style>
 
