@@ -346,6 +346,150 @@ button:active {
     font-size: 12px;
   }
 }
+
+/* ===== PILIHAN TEMA ===== */
+.tema-pilih {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 16px;
+}
+.tema-pilih .tema-btn {
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--c);
+  border: 3px solid transparent;
+  cursor: pointer;
+}
+.tema-pilih .tema-btn:hover {
+  background: var(--c);
+}
+.tema-pilih .tema-btn.aktif {
+  border-color: var(--white);
+  box-shadow: 0 0 0 2px var(--text);
+}
+
+html[data-theme="pink"] {
+  --cream: #fff3f7;
+  --white: #ffffff;
+  --text: #4a2231;
+  --muted: #a98593;
+  --green: #d9638f;
+  --green-dark: #a93b66;
+  --green-light: #fde4ec;
+  --card-border: #f6dbe5;
+  --field-bg: #fffafc;
+  --field-border: #f1cfdb;
+  --track: #f9e6ed;
+  --total-bg: #fff0f5;
+  --label: #8a5a6c;
+  --line: #f8e4eb;
+  --icon-bg: #fde4ec;
+  --icon-fg: #a93b66;
+  --shadow: rgba(169, 59, 102, 0.07);
+}
+
+html[data-theme="biru"] {
+  --cream: #0c1730;
+  --white: #142446;
+  --text: #e5edff;
+  --muted: #8fa3c7;
+  --green: #4f8cf0;
+  --green-dark: #2a5fc4;
+  --green-light: #1b3363;
+  --card-border: #223a6b;
+  --field-bg: #0f1d3a;
+  --field-border: #2b4678;
+  --track: #223a6b;
+  --total-bg: #0f1d3a;
+  --label: #a9bbdb;
+  --line: #223a6b;
+  --icon-bg: #1b3363;
+  --icon-fg: #8db4ff;
+  --shadow: rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="ungu"] {
+  --cream: #f5f1fc;
+  --white: #ffffff;
+  --text: #2f2347;
+  --muted: #8e82a8;
+  --green: #8b5cf6;
+  --green-dark: #5b34b5;
+  --green-light: #ebe2fd;
+  --card-border: #e3d9f6;
+  --field-bg: #faf8ff;
+  --field-border: #d9cdf2;
+  --track: #ece6f8;
+  --total-bg: #f3eefc;
+  --label: #6a5b8c;
+  --line: #ebe5f7;
+  --icon-bg: #ebe2fd;
+  --icon-fg: #5b34b5;
+  --shadow: rgba(91, 52, 181, 0.07);
+}
+
+html[data-theme] body,
+html[data-theme] .card,
+html[data-theme] .money-input,
+html[data-theme] .total-box {
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+html[data-theme] .card {
+  border-color: var(--card-border);
+  box-shadow: 0 8px 24px var(--shadow);
+}
+html[data-theme] .label,
+html[data-theme] .total-label {
+  color: var(--label);
+}
+html[data-theme] .money-input {
+  background: var(--field-bg);
+  border-color: var(--field-border);
+}
+html[data-theme] .money-input:focus-within {
+  border-color: var(--green);
+}
+html[data-theme] .percent-slider {
+  background: linear-gradient(
+    to right,
+    var(--slider-color) 0%,
+    var(--slider-color) var(--fill),
+    var(--track) var(--fill),
+    var(--track) 100%
+  );
+}
+html[data-theme] .percent-slider::-webkit-slider-thumb {
+  border-color: var(--white);
+}
+html[data-theme] .percent-slider::-moz-range-thumb {
+  border-color: var(--white);
+}
+html[data-theme] .total-box {
+  background: var(--total-bg);
+}
+html[data-theme] .total-progress {
+  background: var(--track);
+}
+html[data-theme] .result-row {
+  border-bottom-color: var(--line);
+}
+html[data-theme] .footer {
+  color: var(--muted);
+}
+html[data-theme] .header-icon {
+  background: var(--icon-bg);
+  color: var(--icon-fg);
+}
+html[data-theme] .category-icon {
+  background: var(--icon-bg);
+  color: var(--icon-fg);
+}
+
+  
 </style>
 </head>
 <body>
@@ -358,6 +502,15 @@ button:active {
       Atur uangmu dengan lebih bijak.<br>
       Rencanakan hari ini, siapkan masa depan.
     </p>
+
+<div class="tema-pilih" role="group" aria-label="Pilih tema">
+  <button type="button" class="tema-btn aktif" data-tema="utama" style="--c:#55745d" aria-label="Tema utama"></button>
+  <button type="button" class="tema-btn" data-tema="pink" style="--c:#d9638f" aria-label="Tema pink"></button>
+  <button type="button" class="tema-btn" data-tema="biru" style="--c:#2a5fc4" aria-label="Tema biru gelap"></button>
+  <button type="button" class="tema-btn" data-tema="ungu" style="--c:#8b5cf6" aria-label="Tema ungu"></button>
+</div>
+    
+    
   </header>
   <section class="card">
     <h2 class="section-title">01. Dana yang Kamu Punya</h2>
@@ -699,6 +852,52 @@ uangInput.addEventListener("input", () => {
 btnHitung.addEventListener("click", hitungAlokasi);
 
 perbaruiProgress();
+
+const TEMA = {
+  utama: [93, 155, 105],
+  pink: [217, 99, 143],
+  biru: [79, 140, 240],
+  ungu: [139, 92, 246]
+};
+
+function terapkanTema(nama) {
+  if (!TEMA[nama]) nama = "utama";
+
+  if (nama === "utama") {
+    document.documentElement.removeAttribute("data-theme");
+  } else {
+    document.documentElement.setAttribute("data-theme", nama);
+  }
+
+  // warna "tengah" gradasi slider ikut warna tema
+  HIJAU.splice(0, 3, ...TEMA[nama]);
+
+  document.querySelectorAll(".tema-btn").forEach(tombol => {
+    const aktif = tombol.dataset.tema === nama;
+    tombol.classList.toggle("aktif", aktif);
+    tombol.setAttribute("aria-pressed", aktif);
+  });
+
+  perbaruiProgress();
+}
+
+document.querySelectorAll(".tema-btn").forEach(tombol => {
+  tombol.addEventListener("click", () => {
+    terapkanTema(tombol.dataset.tema);
+    try {
+      localStorage.setItem("temaAlokasi", tombol.dataset.tema);
+    } catch (e) {}
+    getar();
+  });
+});
+
+let temaTersimpan = "utama";
+try {
+  temaTersimpan = localStorage.getItem("temaAlokasi") || "utama";
+} catch (e) {}
+terapkanTema(temaTersimpan);
+
+  
 
 </script>
 
