@@ -6,7 +6,6 @@
 <title>Alokasi Dana</title>
 <style>
 
-
 @keyframes alokasiSukses {
   0% {
     transform: scale(1);
@@ -26,7 +25,6 @@
   animation: alokasiSukses 0.45s ease-out;
 }
 
-  
 * {
   box-sizing: border-box;
 }
@@ -148,7 +146,6 @@ input {
 .category-percent {
   font-size: 15px;
   font-weight: 800;
-  transition: color 0.2s;
 }
 .slider-row {
   width: 100%;
@@ -242,7 +239,7 @@ input {
   width: 0;
   border-radius: inherit;
   background: var(--green);
-  transition: width 0.2s, background 0.2s;
+  transition: width 0.2s;
 }
 .status {
   margin: 10px 0 0;
@@ -327,6 +324,12 @@ button:active {
   text-align: center;
   font-size: 11px;
   line-height: 1.6;
+}
+.haptic-trik {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  pointer-events: none;
 }
 @media (max-width: 360px) {
   .card {
@@ -459,6 +462,11 @@ button:active {
     Kelola uangmu hari ini untuk masa depan yang lebih baik.
   </footer>
 </main>
+
+<label id="pemicuHaptic" class="haptic-trik" aria-hidden="true">
+  <input type="checkbox" switch tabindex="-1">
+</label>
+
 <script>
 const uangInput = document.getElementById("uang");
 const persenInputs = [...document.querySelectorAll(".persen")];
@@ -471,32 +479,92 @@ const btnHitung = document.getElementById("btnHitung");
 const hasil = document.getElementById("hasil");
 const totalRupiah = document.getElementById("totalRupiah");
 const daftarHasil = document.getElementById("daftarHasil");
+const pemicuHaptic = document.getElementById("pemicuHaptic");
 const icons = ["savings", "emergency", "charity", "needs", "fun"];
 const symbols = ["↗", "✚", "♡", "⌂", "✳"];
+
+const KUNING = [232, 200, 90];
+const HIJAU = [93, 155, 105];
+const MERAH = [220, 98, 98];
+
+// Titik warna untuk slider: kuning -> hijau -> (tetap hijau) -> merah
+const titikSlider = [
+  { at: 0, rgb: KUNING },
+  { at: 30, rgb: HIJAU },
+  { at: 60, rgb: HIJAU },
+  { at: 100, rgb: MERAH }
+];
+
+// Titik warna untuk batang total: kuning -> hijau
+const titikTotal = [
+  { at: 0, rgb: KUNING },
+  { at: 100, rgb: HIJAU }
+];
+
+function campurWarna(titik, nilai) {
+  const x = Math.max(0, Math.min(100, nilai));
+
+  for (let i = 1; i < titik.length; i++) {
+    const a = titik[i - 1];
+    const b = titik[i];
+
+    if (x <= b.at) {
+      const t = (x - a.at) / (b.at - a.at);
+      const c = a.rgb.map((v, k) => Math.round(v + (b.rgb[k] - v) * t));
+      return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+    }
+  }
+
+  const akhir = titik[titik.length - 1].rgb;
+  return `rgb(${akhir[0]}, ${akhir[1]}, ${akhir[2]})`;
+}
+
+const warnaPersen = angka => campurWarna(titikSlider, angka);
+
 const rupiah = angka =>
   new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
     maximumFractionDigits: 2
   }).format(angka);
+
+function getar() {
+  if (navigator.vibrate) {
+    navigator.vibrate(10);
+    return;
+  }
+  if (pemicuHaptic) {
+    pemicuHaptic.click();
+  }
+}
+
+function mainkanAnimasiHasil() {
+  hasil.classList.remove("alokasi-sukses");
+  void hasil.offsetWidth; // paksa browser mengulang animasi
+  hasil.classList.add("alokasi-sukses");
+}
+
+hasil.addEventListener("animationend", () => {
+  hasil.classList.remove("alokasi-sukses");
+});
+
 function bacaPersentase() {
   return persenInputs.map(input => Number(input.value));
 }
-function warnaPersen(angka) {
-  if (angka < 30) return "#e8c85a";
-  if (angka <= 60) return "#5d9b69";
-  return "#dc6262";
-}
+
 function perbaruiTampilan() {
   const nilai = bacaPersentase();
   const total = nilai.reduce((sum, angka) => sum + angka, 0);
+
   totalPersen.textContent = `${total}%`;
   totalPersen.classList.toggle("invalid", total !== 100);
+
   totalProgress.style.width = `${Math.min(total, 100)}%`;
   totalProgress.style.background =
-    total > 100 ? "#dc6262" :
-    total < 100 ? "#e8c85a" : "#5d9b69";
+    total > 100 ? "rgb(220, 98, 98)" : campurWarna(titikTotal, total);
+
   statusPersen.classList.toggle("error", total !== 100);
+
   if (total > 100) {
     statusPersen.textContent =
       `Kelebihan ${total - 100}%. Kurangi alokasi.`;
@@ -507,24 +575,31 @@ function perbaruiTampilan() {
     statusPersen.textContent = "Persentase sudah sesuai.";
   }
 }
+
 function perbaruiProgress() {
   rows.forEach((row, index) => {
     const input = persenInputs[index];
     const angka = Number(input.value);
     const warna = warnaPersen(angka);
+
     input.style.setProperty("--fill", `${angka}%`);
     input.style.setProperty("--slider-color", warna);
+
     const label = row.querySelector(".category-percent");
     label.textContent = `${angka}%`;
     label.style.color = warna;
   });
+
   perbaruiTampilan();
 }
+
 function hitungAlokasi() {
   const nilai = bacaPersentase();
   const total = nilai.reduce((sum, angka) => sum + angka, 0);
   const uang = Number(uangInput.value);
+
   pesan.textContent = "";
+
   if (
     uangInput.value.trim() === "" ||
     !Number.isFinite(uang) ||
@@ -535,11 +610,13 @@ function hitungAlokasi() {
     uangInput.focus();
     return;
   }
+
   if (Math.abs(total - 100) > 0.000001) {
     pesan.textContent =
       `Total persentase harus tepat 100%. Saat ini ${total}%.`;
     return;
   }
+
   const alokasi = rows.map((row, index) => ({
     nama: row.dataset.name,
     persen: nilai[index],
@@ -547,7 +624,9 @@ function hitungAlokasi() {
     ikon: symbols[index],
     kelas: icons[index]
   }));
+
   totalRupiah.textContent = rupiah(uang);
+
   daftarHasil.innerHTML = alokasi.map(item => `
     <div class="result-row">
       <div class="category-icon ${item.kelas}">${item.ikon}</div>
@@ -558,70 +637,49 @@ function hitungAlokasi() {
       <div class="result-amount">${rupiah(item.nominal)}</div>
     </div>
   `).join("");
+
+  getar();
   hasil.hidden = false;
+  mainkanAnimasiHasil();
   hasil.scrollIntoView({
     behavior: "smooth",
     block: "start"
   });
 }
-persenInputs.forEach(input => {
-  input.addEventListener("input", () => {
+
+const nilaiTerakhir = persenInputs.map(input => input.value);
+
+persenInputs.forEach((slider, index) => {
+  slider.addEventListener("input", () => {
+    const totalLain = persenInputs.reduce(
+      (total, item) => total + (item === slider ? 0 : Number(item.value)),
+      0
+    );
+
+    if (Number(slider.value) + totalLain > 100) {
+      slider.value = Math.max(0, 100 - totalLain);
+    }
+
     perbaruiProgress();
     pesan.textContent = "";
     hasil.hidden = true;
+
+    if (slider.value !== nilaiTerakhir[index]) {
+      nilaiTerakhir[index] = slider.value;
+      getar();
+    }
   });
 });
+
 uangInput.addEventListener("input", () => {
   pesan.textContent = "";
   hasil.hidden = true;
 });
+
 btnHitung.addEventListener("click", hitungAlokasi);
+
 perbaruiProgress();
-
-
-const semuaSlider = [...document.querySelectorAll(".percent-slider")];
-
-semuaSlider.forEach((slider) => {
-  slider.addEventListener("input", function () {
-    const totalSlider = semuaSlider.reduce(
-      (total, item) => total + Number(item.value),
-      0
-    );
-
-    // Jika total lebih dari 100%, batasi slider yang sedang digeser
-    if (totalSlider > 100) {
-      const totalLain = semuaSlider.reduce(
-        (total, item) =>
-          total + (item === slider ? 0 : Number(item.value)),
-        0
-      );
-
-      slider.value = Math.max(0, 100 - totalLain);
-    }
-  }, true);
-});
-
-  
-semuaSlider.forEach((slider) => {
-  let nilaiSebelumnya = slider.value;
-
-  slider.addEventListener("input", function () {
-    if (slider.value !== nilaiSebelumnya) {
-      nilaiSebelumnya = slider.value;
-
-      // Getaran ringan jika browser mendukungnya
-      if ("vibrate" in navigator) {
-        navigator.vibrate(10);
-      }
-    }
-  });
-});
-
-  
 </script>
-
-
-
 
 </body>
 </html>
