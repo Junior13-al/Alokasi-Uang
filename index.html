@@ -367,12 +367,13 @@ button:active {
     <div class="money-input">
       <span>Rp</span>
       <input
-        type="number"
-        id="uang"
-        min="1"
-        step="any"
-        placeholder="Contoh: 500000"
-        inputmode="decimal"
+  type="text"
+  id="uang"
+  placeholder="Contoh: 500.000"
+  inputmode="numeric"
+  autocomplete="off"
+>
+
       >
     </div>
   </section>
@@ -385,7 +386,7 @@ button:active {
       </div>
       <div class="slider-row">
         <input class="percent-slider persen" type="range"
-          min="0" max="100" step="1" value="30"
+          min="0" max="100" step="1" value="0"
           aria-label="Persentase Tabungan">
       </div>
     </div>
@@ -396,7 +397,7 @@ button:active {
       </div>
       <div class="slider-row">
         <input class="percent-slider persen" type="range"
-          min="0" max="100" step="1" value="10"
+          min="0" max="100" step="1" value="0"
           aria-label="Persentase Dana Darurat">
       </div>
     </div>
@@ -407,7 +408,7 @@ button:active {
       </div>
       <div class="slider-row">
         <input class="percent-slider persen" type="range"
-          min="0" max="100" step="1" value="10"
+          min="0" max="100" step="1" value="0"
           aria-label="Persentase Sedekah">
       </div>
     </div>
@@ -418,7 +419,7 @@ button:active {
       </div>
       <div class="slider-row">
         <input class="percent-slider persen" type="range"
-          min="0" max="100" step="1" value="30"
+          min="0" max="100" step="1" value="0"
           aria-label="Persentase Kebutuhan">
       </div>
     </div>
@@ -429,7 +430,7 @@ button:active {
       </div>
       <div class="slider-row">
         <input class="percent-slider persen" type="range"
-          min="0" max="100" step="1" value="20"
+          min="0" max="100" step="1" value="0"
           aria-label="Persentase Foya-foya">
       </div>
     </div>
@@ -480,6 +481,19 @@ const hasil = document.getElementById("hasil");
 const totalRupiah = document.getElementById("totalRupiah");
 const daftarHasil = document.getElementById("daftarHasil");
 const pemicuHaptic = document.getElementById("pemicuHaptic");
+
+function angkaDariInput() {
+  return Number(uangInput.value.replace(/\D/g, ""));
+}
+
+function formatInputUang() {
+  const digit = uangInput.value.replace(/\D/g, "").slice(0, 12);
+  uangInput.value = digit
+    ? new Intl.NumberFormat("id-ID").format(Number(digit))
+    : "";
+}
+
+
 const icons = ["savings", "emergency", "charity", "needs", "fun"];
 const symbols = ["↗", "✚", "♡", "⌂", "✳"];
 
@@ -527,6 +541,9 @@ const rupiah = angka =>
     currency: "IDR",
     maximumFractionDigits: 2
   }).format(angka);
+
+
+
 
 function getar() {
   if (navigator.vibrate) {
@@ -596,7 +613,8 @@ function perbaruiProgress() {
 function hitungAlokasi() {
   const nilai = bacaPersentase();
   const total = nilai.reduce((sum, angka) => sum + angka, 0);
-  const uang = Number(uangInput.value);
+  const uang = angkaDariInput();
+
 
   pesan.textContent = "";
 
@@ -672,13 +690,16 @@ persenInputs.forEach((slider, index) => {
 });
 
 uangInput.addEventListener("input", () => {
+  formatInputUang();
   pesan.textContent = "";
   hasil.hidden = true;
 });
 
+
 btnHitung.addEventListener("click", hitungAlokasi);
 
 perbaruiProgress();
+
 </script>
 
 </body>
